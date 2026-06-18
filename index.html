@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chromogic</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<!-- SPLASH SCREEN -->
+<section id="splashScreen" class="screen active splash">
+    <div class="splash-content">
+        <h1 class="splash-logo">CHROMOGIC</h1>
+        <p class="splash-tagline">Fill the grid. Follow the clues.</p>
+        <div class="splash-prompt">Click anywhere to begin</div>
+    </div>
+</section>
+    <!-- ANIMATED BACKGROUND -->
+    <div id="bgCanvas"></div>
+
+    <!-- ACHIEVEMENT TOAST -->
+    <div id="achievementToast" class="achievement-toast hidden">
+        <div class="toast-reward"></div>
+        <div class="toast-text">
+            <div class="toast-title"></div>
+            <div class="toast-desc"></div>
+        </div>
+    </div>
+
+    <!-- STREAK BANNER -->
+    <div id="streakBanner" class="streak-banner hidden"></div>
+
+    <!-- ==================== -->
+    <!-- MAIN MENU            -->
+    <!-- ==================== -->
+
+    <section id="menuScreen" class="screen active">
+        <div class="menu-bg-overlay"></div>
+        <div class="menu-content">
+
+            <div class="logo-area">
+                <h1 class="logo">CHROMOGIC</h1>
+                <p class="tagline">Fill the grid. Follow the clues.</p>
+            </div>
+
+            <nav class="main-nav">
+    <div class="nav-item">
+        <button class="nav-btn" id="btnCampaign">Campaign</button>
+        <p class="nav-desc">Choose your grid, difficulty, and puzzle count.</p>
+    </div>
+    <div class="nav-item">
+        <button class="nav-btn" id="btnMarathon">Marathon</button>
+        <p class="nav-desc">Endless puzzles against a countdown — how far can you go?</p>
+    </div>
+    <button class="nav-btn secondary" id="btnAchievements">Achievements</button>
+    <button class="nav-btn secondary" id="btnRules">Rules</button>
+    <button class="nav-btn secondary" id="btnSettings">Settings</button>
+    <button class="nav-btn secondary" id="btnAbout">About</button>
+</nav>
+
+            <div class="menu-stats">
+                <span>⭐ <strong id="menuStars">0</strong></span>
+                <span>👑 <strong id="menuCrowns">0</strong></span>
+                <span>Puzzles: <strong id="menuPuzzles">0</strong></span>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ==================== -->
+    <!-- CAMPAIGN SETUP       -->
+    <!-- ==================== -->
+
+    <section id="campaignSetupScreen" class="screen">
+        <div class="screen-header">
+            <button class="back-btn" id="campaignBackBtn">← Back</button>
+            <h2>Campaign</h2>
+        </div>
+
+        <div class="setup-content">
+
+            <div class="setup-group">
+                <label class="setup-label">Grid Size</label>
+                <div class="option-row" id="gridSizeOptions">
+                    <button class="option-btn active" data-value="4">4×4</button>
+                    <button class="option-btn" data-value="6">6×6</button>
+                    <button class="option-btn" data-value="8">8×8</button>
+                </div>
+                <p class="setup-hint" id="gridSizeHint">2 colors · 2 per row/col</p>
+            </div>
+
+            <div class="setup-group">
+                <label class="setup-label">Difficulty</label>
+                <div class="option-row" id="difficultyOptions">
+                    <button class="option-btn active" data-value="easy">Easy</button>
+                    <button class="option-btn" data-value="medium">Medium</button>
+                    <button class="option-btn" data-value="hard">Hard</button>
+                    <button class="option-btn" data-value="expert">Expert</button>
+                </div>
+                <p class="setup-hint" id="difficultyHint">More clues provided</p>
+            </div>
+
+            <div class="setup-group">
+                <label class="setup-label">Number of Puzzles</label>
+                <div class="option-row" id="puzzleCountOptions">
+                    <button class="option-btn" data-value="3">3</button>
+                    <button class="option-btn active" data-value="6">6</button>
+                    <button class="option-btn" data-value="9">9</button>
+                    <button class="option-btn" data-value="12">12</button>
+                </div>
+            </div>
+
+            <button class="start-btn" id="startCampaignBtn">Start Campaign</button>
+
+        </div>
+    </section>
+
+    <!-- ==================== -->
+    <!-- MARATHON SETUP       -->
+    <!-- ==================== -->
+
+    <section id="marathonSetupScreen" class="screen">
+        <div class="screen-header">
+            <button class="back-btn" id="marathonBackBtn">← Back</button>
+            <h2>Marathon</h2>
+        </div>
+
+        <div class="setup-content">
+
+            <div class="setup-group">
+                <label class="setup-label">Difficulty</label>
+                <div class="option-row" id="marathonDifficultyOptions">
+                    <button class="option-btn active" data-value="easy">Easy</button>
+                    <button class="option-btn" data-value="medium">Medium</button>
+                    <button class="option-btn" data-value="hard">Hard</button>
+                </div>
+                <p class="setup-hint" id="marathonDifficultyHint">Starts with 4×4, escalates over time</p>
+            </div>
+
+            <div class="marathon-best-wrap">
+                <p>Personal Best: <strong id="marathonBestDisplay">0 puzzles</strong></p>
+            </div>
+
+            <button class="start-btn" id="startMarathonBtn">Start Marathon</button>
+
+        </div>
+    </section>
+
+    <!-- ==================== -->
+    <!-- GAME SCREEN          -->
+    <!-- ==================== -->
+
+    <section id="gameScreen" class="screen">
+
+        <div class="game-topbar">
+
+            <div class="topbar-left">
+                <button class="icon-btn" id="pauseBtn">⏸</button>
+                <span class="topbar-label">Puzzle <span id="puzzleNumber">1</span>/<span id="puzzleTotalDisplay">6</span></span>
+            </div>
+
+            <div class="topbar-center">
+                <span class="timer-display" id="timerDisplay">00:00</span>
+            </div>
+
+            <div class="topbar-right">
+                <span class="topbar-label">✗ <span id="mistakeCount">0</span></span>
+                <span class="topbar-label">🔥 <span id="streakCount">0</span></span>
+            </div>
+
+        </div>
+
+        <div class="game-subbar">
+            <span id="modeLabel"></span>
+            <span>Solved: <strong id="solvedCount">0</strong></span>
+            <div class="puzzle-log-wrap">
+    <button class="puzzle-log-toggle" id="puzzleLogToggle">
+        ▼ Details
+    </button>
+    <div class="puzzle-log-dropdown" id="puzzleLogDropdown">
+        <table class="puzzle-log-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Time</th>
+                    <th>Mistakes</th>
+                </tr>
+            </thead>
+            <tbody id="puzzleLogBody"></tbody>
+        </table>
+    </div>
+</div>  
+            <span id="countdownWrap">⏱ <strong id="countdownDisplay">03:00</strong></span>
+        </div>
+
+        <div id="boardWrap">
+            <div id="board"></div>
+        </div>
+
+        <div class="game-controls">
+            <button id="skipBtn" class="ctrl-btn skip">Skip</button>
+            <button id="submitBtn" class="ctrl-btn submit">Check</button>
+        </div>
+
+    </section>
+
+    <!-- ==================== -->
+    <!-- PAUSE SCREEN         -->
+    <!-- ==================== -->
+
+    <section id="pauseScreen" class="screen overlay-screen">
+        <div class="overlay-box">
+            <h2>Paused</h2>
+            <button class="nav-btn" id="resumeBtn">Resume</button>
+            <button class="nav-btn secondary" id="pauseSettingsBtn">Settings</button>
+            <button class="nav-btn secondary" id="quitBtn">Quit to Menu</button>
+        </div>
+    </section>
+
+    <!-- ==================== -->
+    <!-- PUZZLE RESULT SCREEN -->
+    <!-- ==================== -->
+
+    <section id="puzzleResultScreen" class="screen overlay-screen">
+        <div class="overlay-box">
+            <div id="puzzleResultBadge"></div>
+            <h2 id="puzzleResultTitle"></h2>
+            <p id="puzzleResultTime"></p>
+            <p id="puzzleResultMistakes"></p>
+            <button class="nav-btn" id="nextPuzzleBtn">Next Puzzle →</button>
+        </div>
+    </section>
+
+    <!-- ==================== -->
+    <!-- CAMPAIGN RESULTS     -->
+    <!-- ==================== -->
+
+    <section id="campaignResultScreen" class="screen">
+        <div class="screen-header">
+            <h2>Campaign Complete</h2>
+        </div>
+
+        <div class="result-badge-area">
+            <div id="campaignBadge"></div>
+        </div>
+
+        <div class="result-stats-box">
+            <div class="result-row">
+                <span>Puzzles Solved</span>
+                <span id="crSolved"></span>
+            </div>
+            <div class="result-row">
+                <span>Total Mistakes</span>
+                <span id="crMistakes"></span>
+            </div>
+            <div class="result-row">
+                <span>Total Time</span>
+                <span id="crTime"></span>
+            </div>
+            <div class="result-row">
+                <span>Best Streak</span>
+                <span id="crStreak"></span>
+            </div>
+        </div>
+
+        <div id="crAchievements" class="unlocked-achievements"></div>
+
+        <div class="result-actions">
+            <button class="nav-btn" id="playAgainBtn">Play Again</button>
+            <button class="nav-btn secondary" id="crMenuBtn">Main Menu</button>
+        </div>
+    </section>
+
+    <!-- ==================== -->
+    <!-- MARATHON GAME OVER   -->
+    <!-- ==================== -->
+
+    <section id="marathonOverScreen" class="screen">
+        <div class="screen-header">
+            <h2>Marathon Over</h2>
+        </div>
+
+        <div class="result-badge-area">
+            <div id="marathonBadge"></div>
+        </div>
+
+        <div class="result-stats-box">
+            <div class="result-row">
+                <span>Puzzles Solved</span>
+                <span id="mrSolved"></span>
+            </div>
+            <div class="result-row">
+                <span>Total Mistakes</span>
+                <span id="mrMistakes"></span>
+            </div>
+            <div class="result-row">
+                <span>Best Streak</span>
+                <span id="mrStreak"></span>
+            </div>
+            <div class="result-row">
+                <span>Personal Best</span>
+                <span id="mrBest"></span>
+            </div>
+        </div>
+
+        <div id="mrAchievements" class="unlocked-achievements"></div>
+
+        <div class="result-actions">
+            <button class="nav-btn" id="mrPlayAgainBtn">Play Again</button>
+            <button class="nav-btn secondary" id="mrMenuBtn">Main Menu</button>
+        </div>
+    </section>
+
+    <!-- ==================== -->
+    <!-- ACHIEVEMENTS         -->
+    <!-- ==================== -->
+
+    <section id="achievementsScreen" class="screen">
+        <div class="screen-header">
+            <button class="back-btn" id="achievementsBackBtn">← Back</button>
+            <h2>Achievements</h2>
+        </div>
+
+        <div class="achievements-summary">
+            <span>⭐ <strong id="achStars">0</strong></span>
+            <span>👑 <strong id="achCrowns">0</strong></span>
+            <span>Unlocked: <strong id="achUnlocked">0</strong>/<strong id="achTotal">20</strong></span>
+        </div>
+
+        <div id="achievementsList" class="achievements-list"></div>
+    </section>
+
+    <!-- ==================== -->
+    <!-- RULES                -->
+    <!-- ==================== -->
+
+    <section id="rulesScreen" class="screen">
+        <div class="screen-header">
+            <button class="back-btn" id="rulesBackBtn">← Back</button>
+            <h2>How to Play</h2>
+        </div>
+
+        <div class="rules-content">
+
+            <div class="rules-step">
+                <div class="rules-step-number">1</div>
+                <div class="rules-step-text">
+                    <h3>The Grid</h3>
+                    <p>The board is an N×N grid. Each row and each column must contain exactly 2 of each color.</p>
+                </div>
+            </div>
+
+            <div class="rules-step">
+                <div class="rules-step-number">2</div>
+                <div class="rules-step-text">
+                    <h3>Clue Cells</h3>
+                    <p>Pre-filled cells show a color and a number. That number tells you how many of its orthogonal neighbors (up, down, left, right) share the same color in the solution.</p>
+                </div>
+            </div>
+
+            <div class="rules-demo" id="rulesDemo"></div>
+
+            <div class="rules-step">
+                <div class="rules-step-number">3</div>
+                <div class="rules-step-text">
+                    <h3>Filling Cells</h3>
+                    <p>Click any empty cell to cycle through the available colors. Click again to cycle to the next color, or back to empty.</p>
+                </div>
+            </div>
+
+            <div class="rules-step">
+                <div class="rules-step-number">4</div>
+                <div class="rules-step-text">
+                    <h3>Checking Your Answer</h3>
+                    <p>Press <strong>Check</strong> to verify your solution. Every incorrect cell is highlighted and counts as one mistake. Use this wisely — mistakes affect your final score.</p>
+                </div>
+            </div>
+
+            <div class="rules-step">
+                <div class="rules-step-number">5</div>
+                <div class="rules-step-text">
+                    <h3>Streaks</h3>
+                    <p>Solve puzzles with 0 mistakes to build a streak. Streak milestones are celebrated with a special banner.</p>
+                </div>
+            </div>
+
+            <div class="rules-step">
+                <div class="rules-step-number">6</div>
+                <div class="rules-step-text">
+                    <h3>Marathon Mode</h3>
+                    <p>Race against a countdown timer. Complete a puzzle to gain bonus time. Running out of time ends the run. The further you go, the harder it gets.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ==================== -->
+    <!-- SETTINGS             -->
+    <!-- ==================== -->
+
+    <section id="settingsScreen" class="screen">
+        <div class="screen-header">
+            <button class="back-btn" id="settingsBackBtn">← Back</button>
+            <h2>Settings</h2>
+        </div>
+
+        <div class="settings-content">
+
+            <div class="settings-group">
+                <label class="settings-label">Theme</label>
+                <div class="option-row">
+                    <button class="option-btn active" id="themeDark" data-value="dark">Dark</button>
+                    <button class="option-btn" id="themeLight" data-value="light">Light</button>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <label class="settings-label">Colorblind Mode</label>
+                <div class="toggle-row">
+                    <span id="colorblindLabel">Off</span>
+                    <div class="toggle-wrap">
+                        <input type="checkbox" id="colorblindToggle">
+                        <label for="colorblindToggle" class="toggle-track"></label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-group">
+                <label class="settings-label">Music Volume</label>
+                <input type="range" id="musicVolume" min="0" max="1" step="0.05" value="0.7">
+            </div>
+
+            <div class="settings-group">
+                <label class="settings-label">SFX Volume</label>
+                <input type="range" id="sfxVolume" min="0" max="1" step="0.05" value="0.8">
+            </div>
+
+            <button class="nav-btn" id="resetSaveBtn">Reset Save Data</button>
+
+        </div>
+    </section>
+
+    <!-- ==================== -->
+    <!-- ABOUT                -->
+    <!-- ==================== -->
+
+   <section id="aboutScreen" class="screen">
+        <button class="back-btn about-back-btn" id="aboutBackBtn">← Back</button>
+
+        <div class="about-content">
+            <h3 class="about-title">CHROMOGIC</h3>
+            <p class="about-body">
+                Chromogic is a color-logic puzzle game built around a simple rule:
+                every row and column must contain exactly the right number of each color.
+                Clue cells guide you toward the one unique solution hiding in each grid.
+            </p>
+            <p class="about-body">
+                Start small with a 4×4 grid and two colors.
+                Work your way up to the full 8×8 challenge with four colors and expert-level clues.
+                In Marathon mode, the puzzles never stop — only your time does.
+            </p>
+            <p class="about-version">Version 1.0.0</p>
+        </div>
+    </section>
+
+    <!-- ==================== -->
+    <!-- SCRIPTS              -->
+    <!-- ==================== -->
+
+    <script src="js/data.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/puzzleGenerator.js"></script>
+    <script src="js/audio.js"></script>
+    <script src="js/settings.js"></script>
+    <script src="js/achievements.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/campaign.js"></script>
+    <script src="js/marathon.js"></script>
+
+</body>
+</html>
