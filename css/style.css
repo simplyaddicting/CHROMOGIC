@@ -1400,35 +1400,9 @@ input[type="range"]::-webkit-slider-thumb:hover {
    LOW TIME WARNING
 ===================================== */
 
-body.low-time #bgCanvas::before {
-    background: #cc0000;
-    opacity: 0.25;
-    animation:
-        bgFloat 14s ease-in-out
-        infinite alternate,
-        lowTimePulse 1s ease-in-out
-        infinite;
-}
-
-body.low-time #bgCanvas::after {
-    background: #ff2200;
-    opacity: 0.2;
-    animation:
-        bgFloat 10s ease-in-out
-        infinite alternate,
-        lowTimePulse 1s ease-in-out
-        infinite;
-    animation-delay: -5s, -0.5s;
-}
-
 body.low-time .timer-display {
     color: #ff4444;
     animation: lowTimePulse 1s ease-in-out infinite;
-}
-
-@keyframes lowTimePulse {
-    0%, 100% { opacity: 1; }
-    50%       { opacity: 0.5; }
 }
 
 /* ===== SECTION 27 =====
@@ -1519,3 +1493,19 @@ body.low-time .timer-display {
     z-index: 50;
 }
 .now-playing.hidden { opacity: 0; }
+
+body.low-time::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: #cc0000;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 0;
+    animation: lowTimePulse 1s ease-in-out infinite;
+}
+
+@keyframes lowTimePulse {
+    0%, 100% { opacity: 0.0; }
+    50%       { opacity: 0.30; }
+}

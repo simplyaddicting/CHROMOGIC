@@ -184,7 +184,9 @@ marathon.lastGridSize = 4;
             DIFFICULTY_CONFIGS[
                 puzzleConfig.difficulty
             ];
-        marathon.lowTimePinged = false;
+        if (countdownRemaining >30) {
+            marathon.lowTimePinged = false;
+        }
 
         GameCore.initPuzzle({
             mode:          "marathon",
@@ -329,16 +331,10 @@ marathon.lastGridSize = 4;
                     countdownRemaining <= 30 &&
                     !marathon.lowTimePinged
                 ) {
+                    marathon.lowTimePinged = true;
+AudioSystem.playSfx("low_time");
+document.body.classList.add("low-time");
 
-                    marathon.lowTimePinged =
-                        true;
-
-                    AudioSystem.playSfx(
-                        "low_time"
-                    );
-
-                    document.body.classList
-                        .add("low-time");
                 }
 
                 // Return to normal above 30s
@@ -347,12 +343,9 @@ marathon.lastGridSize = 4;
                     countdownRemaining > 30 &&
                     marathon.lowTimePinged
                 ) {
+                    marathon.lowTimePinged = false;
+document.body.classList.remove("low-time");
 
-                    marathon.lowTimePinged =
-                        false;
-
-                    document.body.classList
-                        .remove("low-time");
                 }
             },
             250
@@ -453,6 +446,7 @@ countdownRemaining += bonus;
 
     function onPuzzleSkipped() {
         StorageManager.recordSkip();
+        AchievementManager.evaluateSkipCount();
         GameCore.logPuzzleResult(
             marathon.currentIndex,
             null,

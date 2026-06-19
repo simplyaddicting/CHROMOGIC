@@ -714,6 +714,7 @@ function evaluateAfterMarathon(
         evaluateAfterCampaign,
         evaluateAfterMarathon,
         evaluateStreak,
+        evaluateSkipCount,
         renderScreen,
         renderNewlyUnlocked,
         renderPersonalBests

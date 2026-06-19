@@ -204,6 +204,7 @@ const CampaignManager = (() => {
 
     function onPuzzleSkipped() {
         StorageManager.recordSkip();
+        AchievementManager.evaluateSkipCount();
         GameCore.logPuzzleResult(
             campaign.currentIndex,
             null,

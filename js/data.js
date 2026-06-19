@@ -163,7 +163,7 @@ const MARATHON_CONFIG = {
         id: "hard",
         label: "Hard",
         startTime: 120,
-        timeBonus: { 4: 12, 6: 20, 8: 28 },
+        timeBonusByGrid: { 4: 12, 6: 20, 8: 28 },
         timePenalty: 10,
         sequence: [
             { gridSize: 4, difficulty: "hard",    count: 5  },
