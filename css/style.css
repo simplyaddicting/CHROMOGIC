@@ -1495,14 +1495,14 @@ body.low-time .timer-display {
     z-index: 10;
 }
 
-.personal-bests-section { padding: 1rem; }
-.pb-heading { font-size: 1.1rem; margin-bottom: 0.5rem; }
-.pb-subheading { font-size: 0.9rem; opacity: 0.7; margin: 0.75rem 0 0.4rem; text-transform: uppercase; letter-spacing: 0.05em; }
-.pb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.6rem; }
-.pb-card { background: var(--card-bg); border-radius: 8px; padding: 0.6rem 0.75rem; font-size: 0.8rem; }
-.pb-card-title { font-weight: bold; margin-bottom: 0.3rem; font-size: 0.85rem; }
-.pb-card-row { opacity: 0.85; margin: 0.1rem 0; }
-.pb-card-empty { opacity: 0.45; font-style: italic; }
+.personal-bests-section { padding: 1rem; text-align: center; }
+.pb-heading { font-size: 1.1rem; margin-bottom: 0.5rem; font-family: var(--font-main); }
+.pb-subheading { font-size: 0.9rem; opacity: 0.7; margin: 0.75rem 0 0.4rem; text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--font-main); }
+.pb-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; margin-bottom: 1rem; }
+.pb-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem 0.75rem; font-size: 0.8rem; font-family: var(--font-main); text-align: center; min-width: 140px; }
+.pb-card-title { font-weight: bold; margin-bottom: 0.3rem; font-size: 0.85rem; font-family: var(--font-main); }
+.pb-card-row { opacity: 0.85; margin: 0.1rem 0; font-family: var(--font-main); }
+.pb-card-empty { opacity: 0.45; font-style: italic; font-family: var(--font-main); }
 
 .now-playing {
     position: fixed;

@@ -715,7 +715,8 @@ function evaluateAfterMarathon(
         evaluateAfterMarathon,
         evaluateStreak,
         renderScreen,
-        renderNewlyUnlocked
+        renderNewlyUnlocked,
+        renderPersonalBests
     };
 
 })();
