@@ -403,7 +403,8 @@ function getCampaignBests() {
         recordMarathonResult,
         unlockAchievement,
         recordSkip,
-        getMarathonBestStreak
+        getMarathonBestStreak,
+        getCampaignBests
     };
 
 })();
