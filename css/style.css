@@ -1494,3 +1494,28 @@ body.low-time .timer-display {
     left: 30px;
     z-index: 10;
 }
+
+.personal-bests-section { padding: 1rem; }
+.pb-heading { font-size: 1.1rem; margin-bottom: 0.5rem; }
+.pb-subheading { font-size: 0.9rem; opacity: 0.7; margin: 0.75rem 0 0.4rem; text-transform: uppercase; letter-spacing: 0.05em; }
+.pb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.6rem; }
+.pb-card { background: var(--card-bg); border-radius: 8px; padding: 0.6rem 0.75rem; font-size: 0.8rem; }
+.pb-card-title { font-weight: bold; margin-bottom: 0.3rem; font-size: 0.85rem; }
+.pb-card-row { opacity: 0.85; margin: 0.1rem 0; }
+.pb-card-empty { opacity: 0.45; font-style: italic; }
+
+.now-playing {
+    position: fixed;
+    bottom: 12px;
+    left: 14px;
+    font-size: 0.72rem;
+    opacity: 0.55;
+    pointer-events: none;
+    max-width: 240px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: opacity 0.4s;
+    z-index: 50;
+}
+.now-playing.hidden { opacity: 0; }

@@ -453,68 +453,51 @@ const HUDManager = (() => {
     }
 
     function updateTimer(seconds) {
+    const state = typeof GameCore !== "undefined" ? GameCore.getState() : null;
+    const isMarathon = state && state.mode === "marathon";
 
-        const el =
-            document.getElementById(
-                "timerDisplay"
-            );
-
-        if (!el) {
-            return;
-        }
-
-        el.textContent =
-            formatTime(seconds);
+    // In marathon: per-puzzle timer goes to subbar
+    if (isMarathon) {
+        const sub = document.getElementById("puzzleTimerSubbar");
+        if (sub) sub.textContent = formatTime(seconds);
+    } else {
+        const el = document.getElementById("timerDisplay");
+        if (el) el.textContent = formatTime(seconds);
     }
+}
 
     function updateCountdown(seconds) {
+    // Countdown is now the main topbar display in marathon
+    const el = document.getElementById("countdownDisplay");
+    const wrap = document.getElementById("countdownWrap");
 
-        const el =
-            document.getElementById(
-                "countdownDisplay"
-            );
+    // Show the countdown in topbar center, hide per-puzzle timer there
+    const mainTimer = document.getElementById("timerDisplay");
+    if (mainTimer) mainTimer.style.display = "none";
+    if (el) el.style.display = "";
 
-        const wrap =
-            document.getElementById(
-                "countdownWrap"
-            );
+    if (wrap) wrap.classList.add("visible");
+    if (!el) return;
 
-        if (wrap) {
-            wrap.classList.add("visible");
-        }
+    el.textContent = formatTime(seconds);
 
-        if (!el) {
-            return;
-        }
-
-        el.textContent =
-            formatTime(seconds);
-
-        // Turn red when under 30 seconds
-        if (el) {
-
-            if (seconds <= 30) {
-                el.style.color =
-                    "var(--color-3)";
-            } else {
-                el.style.color = "";
-            }
-        }
+    if (seconds <= 30) {
+        el.style.color = "var(--color-3)";
+    } else {
+        el.style.color = "";
     }
+}
 
     function hideCountdown() {
+    // Campaign mode: hide countdown display, show per-puzzle timer
+    const el = document.getElementById("countdownDisplay");
+    const mainTimer = document.getElementById("timerDisplay");
+    const wrap = document.getElementById("countdownWrap");
 
-        const wrap =
-            document.getElementById(
-                "countdownWrap"
-            );
-
-        if (wrap) {
-            wrap.classList.remove(
-                "visible"
-            );
-        }
-    }
+    if (el) el.style.display = "none";
+    if (mainTimer) mainTimer.style.display = "";
+    if (wrap) wrap.classList.remove("visible");
+}
 
     function formatTime(seconds) {
 
@@ -1237,25 +1220,17 @@ const MarathonSetupUI = (() => {
     }
 
     function updateBestDisplay(difficulty) {
-
-        const el =
-            document.getElementById(
-                "marathonBestDisplay"
-            );
-
-        if (!el) {
-            return;
-        }
-
-        const best =
-            StorageManager
-                .getMarathonBest(
-                    difficulty
-                );
-
-        el.textContent =
-            best + " puzzles";
+    const el = document.getElementById("marathonBestDisplay");
+    if (el) {
+        const best = StorageManager.getMarathonBest(difficulty);
+        el.textContent = best + " puzzles";
     }
+    const streakEl = document.getElementById("marathonBestStreakDisplay");
+    if (streakEl) {
+        const bestStreak = StorageManager.getMarathonBestStreak(difficulty);
+        streakEl.textContent = bestStreak;
+    }
+}
 
     function getSelections() {
 

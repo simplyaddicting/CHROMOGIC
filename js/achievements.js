@@ -96,6 +96,54 @@ const AchievementManager = (() => {
         }, 3000);
     }
 
+function renderPersonalBests() {
+    const pbCampaign = document.getElementById("pbCampaign");
+    const pbMarathon = document.getElementById("pbMarathon");
+
+    if (pbCampaign) {
+        pbCampaign.innerHTML = "";
+        const bests = StorageManager.getCampaignBests();
+        const difficulties = ["easy", "medium", "hard", "expert"];
+        difficulties.forEach(function(diff) {
+            const b = bests[diff];
+            const card = document.createElement("div");
+            card.className = "pb-card";
+            if (b) {
+                const avgSec = Math.round(b.avgTime);
+                card.innerHTML =
+                    "<div class=\"pb-card-title\">" + diff.charAt(0).toUpperCase() + diff.slice(1) + "</div>" +
+                    "<div class=\"pb-card-row\">Solved: <strong>" + b.solved + "/" + b.puzzleCount + "</strong></div>" +
+                    "<div class=\"pb-card-row\">Mistakes: <strong>" + b.mistakes + "</strong></div>" +
+                    "<div class=\"pb-card-row\">Total: <strong>" + HUDManager.formatTime(b.totalTime) + "</strong></div>" +
+                    "<div class=\"pb-card-row\">Avg/puzzle: <strong>" + HUDManager.formatTime(avgSec) + "</strong></div>";
+            } else {
+                card.innerHTML =
+                    "<div class=\"pb-card-title\">" + diff.charAt(0).toUpperCase() + diff.slice(1) + "</div>" +
+                    "<div class=\"pb-card-empty\">No games yet</div>";
+            }
+            pbCampaign.appendChild(card);
+        });
+    }
+
+    if (pbMarathon) {
+        pbMarathon.innerHTML = "";
+        const mDiffs = ["easy", "medium", "hard"];
+        mDiffs.forEach(function(diff) {
+            const best = StorageManager.getMarathonBest(diff);
+            const bestStreak = StorageManager.getMarathonBestStreak(diff);
+            const card = document.createElement("div");
+            card.className = "pb-card";
+            card.innerHTML =
+                "<div class=\"pb-card-title\">" + diff.charAt(0).toUpperCase() + diff.slice(1) + "</div>" +
+                (best > 0
+                    ? "<div class=\"pb-card-row\">Puzzles reached: <strong>" + best + "</strong></div>" +
+                      "<div class=\"pb-card-row\">Longest streak: <strong>" + bestStreak + "</strong></div>"
+                    : "<div class=\"pb-card-empty\">No games yet</div>"
+                );
+            pbMarathon.appendChild(card);
+        });
+    }
+}
     // ===== SECTION 4 =====
     // TRY UNLOCK
     // =====================================
@@ -447,6 +495,8 @@ function evaluateAfterMarathon(
             achTotal.textContent =
                 ACHIEVEMENTS.length;
         }
+
+        renderPersonalBests();
 
         list.innerHTML = "";
 

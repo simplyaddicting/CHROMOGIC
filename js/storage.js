@@ -287,6 +287,25 @@ const StorageManager = (() => {
                     .slice(-50);
         }
 
+        const diff = result.difficulty;
+const existing = save.campaignBests[diff];
+const isBetter =
+    !existing ||
+    result.solved > existing.solved ||
+    (result.solved === existing.solved && result.mistakes < existing.mistakes) ||
+    (result.solved === existing.solved && result.mistakes === existing.mistakes && result.totalTime < existing.totalTime);
+
+if (isBetter) {
+    save.campaignBests[diff] = {
+        solved:      result.solved,
+        puzzleCount: result.puzzleCount,
+        mistakes:    result.mistakes,
+        totalTime:   result.totalTime,
+        avgTime:     result.solved > 0
+                        ? result.totalTime / result.solved
+                        : 0
+    };
+}
         persist();
     }
 
@@ -294,22 +313,22 @@ const StorageManager = (() => {
     // MARATHON HISTORY
     // =====================================
 
-    function recordMarathonResult(
-        difficulty,
-        puzzlesSurvived
-    ) {
+function getMarathonBestStreak(difficulty) {
+    const val = save.marathonBestStreak && save.marathonBestStreak[difficulty];
+    return val || 0;
+}
 
-        const current =
-            getMarathonBest(difficulty);
-
-        if (puzzlesSurvived > current) {
-
-            save.marathonBest[difficulty] =
-                puzzlesSurvived;
-
-            persist();
-        }
+    function recordMarathonResult(difficulty, puzzlesSurvived, bestStreak) {
+    const current = getMarathonBest(difficulty);
+    if (puzzlesSurvived > current) {
+        save.marathonBest[difficulty] = puzzlesSurvived;
     }
+    if (!save.marathonBestStreak) save.marathonBestStreak = { easy: 0, medium: 0, hard: 0 };
+    if (bestStreak > (save.marathonBestStreak[difficulty] || 0)) {
+        save.marathonBestStreak[difficulty] = bestStreak;
+    }
+    persist();
+}
 
     // ===== SECTION 11 =====
     // ACHIEVEMENTS
@@ -359,6 +378,10 @@ const StorageManager = (() => {
         return true;
     }
 
+function getCampaignBests() {
+    return save.campaignBests || { easy: null, medium: null, hard: null, expert: null };
+}
+
     // ===== SECTION 12 =====
     // PUBLIC API
     // =====================================
@@ -379,7 +402,8 @@ const StorageManager = (() => {
         recordCampaignResult,
         recordMarathonResult,
         unlockAchievement,
-        recordSkip
+        recordSkip,
+        getMarathonBestStreak
     };
 
 })();

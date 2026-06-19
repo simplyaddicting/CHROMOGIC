@@ -138,8 +138,9 @@
             </div>
 
             <div class="marathon-best-wrap">
-                <p>Personal Best: <strong id="marathonBestDisplay">0 puzzles</strong></p>
-            </div>
+    <p>Personal Best: <strong id="marathonBestDisplay">0 puzzles</strong></p>
+    <p>Longest Streak: <strong id="marathonBestStreakDisplay">0</strong></p>
+</div>
 
             <button class="start-btn" id="startMarathonBtn">Start Marathon</button>
 
@@ -160,8 +161,9 @@
             </div>
 
             <div class="topbar-center">
-                <span class="timer-display" id="timerDisplay">00:00</span>
-            </div>
+    <span class="timer-display" id="timerDisplay">00:00</span>
+    <span class="timer-display" id="countdownDisplay" style="display:none;">03:00</span>
+</div>
 
             <div class="topbar-right">
                 <span class="topbar-label">✗ <span id="mistakeCount">0</span></span>
@@ -190,7 +192,7 @@
         </table>
     </div>
 </div>  
-            <span id="countdownWrap">⏱ <strong id="countdownDisplay">03:00</strong></span>
+            <span id="countdownWrap">⏱ <strong id="puzzleTimerSubbar">00:00</strong></span>
         </div>
 
         <div id="boardWrap">
@@ -326,6 +328,20 @@
             <span>👑 <strong id="achCrowns">0</strong></span>
             <span>Unlocked: <strong id="achUnlocked">0</strong>/<strong id="achTotal">20</strong></span>
         </div>
+
+<div id="personalBestsSection" class="personal-bests-section">
+    <h3 class="pb-heading">Personal Bests</h3>
+
+    <h4 class="pb-subheading">Campaign</h4>
+    <div id="pbCampaign" class="pb-grid">
+        <!-- filled by JS -->
+    </div>
+
+    <h4 class="pb-subheading">Marathon</h4>
+    <div id="pbMarathon" class="pb-grid">
+        <!-- filled by JS -->
+    </div>
+</div>
 
         <div id="achievementsList" class="achievements-list"></div>
     </section>
@@ -478,6 +494,6 @@
     <script src="js/game.js"></script>
     <script src="js/campaign.js"></script>
     <script src="js/marathon.js"></script>
-
+    <div id="nowPlaying" class="now-playing hidden"></div>
 </body>
 </html>

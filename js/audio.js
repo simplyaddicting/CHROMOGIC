@@ -16,6 +16,15 @@ const AudioSystem = (() => {
     let currentMusicKey = null;
     let isMusicPaused = false;
 
+    function showNowPlaying(path) {
+    const el = document.getElementById("nowPlaying");
+    if (!el) return;
+    // Extract filename without extension
+    const parts = path.split("/");
+    const filename = parts[parts.length - 1].replace(/\.[^/.]+$/, "");
+    el.textContent = "♪ " + filename;
+    el.classList.remove("hidden");
+}
     // ===== SECTION 2 =====
     // PLAYLIST STATE
     // Each difficulty has a soft and
@@ -198,6 +207,7 @@ const AudioSystem = (() => {
         const path = paths[0];
 
         currentMusic = new Audio(path);
+        showNowPlaying(path);
         currentMusic.loop = true;
         currentMusic.volume = musicVolume;
         currentMusic.preload = "auto";
@@ -254,7 +264,7 @@ const AudioSystem = (() => {
         currentPlaylist = shuffleArray(
             list.slice()
         );
-        currentTrackIndex = 0;
+        currentTrackIndex = Math.floor(Math.random() * currentPlaylist.length);
         playlistActive = true;
         currentMusicKey =
             difficulty + "_" + mode;
@@ -285,8 +295,8 @@ const AudioSystem = (() => {
             currentPlaylist[
                 currentTrackIndex
             ];
-
         currentMusic = new Audio(path);
+        showNowPlaying(path);
         currentMusic.volume = musicVolume;
         isMusicPaused = false;
 

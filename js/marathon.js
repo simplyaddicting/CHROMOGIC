@@ -395,8 +395,12 @@ marathon.lastGridSize = 4;
         pauseCountdown();
 
         // Add time bonus
-        countdownRemaining +=
-            marathon.config.timeBonus;
+const puzzleConfig = resolveCurrentConfig();
+const bonusTable = marathon.config.timeBonusByGrid;
+const bonus = bonusTable
+    ? (bonusTable[puzzleConfig.gridSize] || marathon.config.timeBonus)
+    : marathon.config.timeBonus;
+countdownRemaining += bonus;
 
         if (result.flawless) {
 
@@ -517,7 +521,8 @@ marathon.lastGridSize = 4;
 
         StorageManager.recordMarathonResult(
             difficulty,
-            solved
+            solved,
+            marathon.bestStreak
         );
 
         const newBest =

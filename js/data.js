@@ -135,7 +135,7 @@ const MARATHON_CONFIG = {
         id: "easy",
         label: "Easy",
         startTime: 180,
-        timeBonus: 30,
+        timeBonusByGrid: { 4: 20, 6: 30, 8: 40 },
         timePenalty: 5,
         sequence: [
             { gridSize: 4, difficulty: "easy",   count: 5  },
@@ -149,7 +149,7 @@ const MARATHON_CONFIG = {
         id: "medium",
         label: "Medium",
         startTime: 150,
-        timeBonus: 25,
+        timeBonusByGrid: { 4: 16, 6: 24, 8: 34 },
         timePenalty: 8,
         sequence: [
             { gridSize: 4, difficulty: "medium",  count: 5  },
@@ -163,7 +163,7 @@ const MARATHON_CONFIG = {
         id: "hard",
         label: "Hard",
         startTime: 120,
-        timeBonus: 20,
+        timeBonus: { 4: 12, 6: 20, 8: 28 },
         timePenalty: 10,
         sequence: [
             { gridSize: 4, difficulty: "hard",    count: 5  },
@@ -619,7 +619,19 @@ const DEFAULT_SAVE = {
         colorblind: false,
         musicVolume: 0.7,
         sfxVolume: 0.8
-    }
+    },
+
+    marathonBestStreak: {
+    easy: 0,
+    medium: 0,
+    hard: 0
+},
+campaignBests: {
+    easy:   null,
+    medium: null,
+    hard:   null,
+    expert: null
+},
 };
 
 // ===== SECTION 9 =====

@@ -352,6 +352,15 @@ const GameCore = (() => {
         return null;
     }
 
+function getCompleteDifficulty(state) {
+    if (state.mode === "marathon") {
+        if (state.gridSize === 4) return "easy";
+        if (state.gridSize === 6) return "hard";
+        return "expert";
+    }
+    return state.difficulty;
+}
+
     // ===== SECTION 8 =====
     // CHECK SOLUTION
     // =====================================
@@ -445,7 +454,7 @@ const GameCore = (() => {
             state.streak++;
 
             AudioSystem.playCompleteSfx(
-                state.difficulty,
+                getCompleteDifficulty(state),
                 true
             );
 
@@ -458,7 +467,7 @@ const GameCore = (() => {
             state.streak = 0;
 
             AudioSystem.playCompleteSfx(
-                state.difficulty,
+                getCompleteDifficulty(state),
                 false
             );
         }
