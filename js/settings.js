@@ -16,6 +16,23 @@ const SettingsManager = (() => {
         sfxVolume:    0.8
     };
 
+    // Tracks whether Settings was opened
+    // from the pause screen, so Back can
+    // return to the paused game instead
+    // of always going to the main menu.
+    let openedFromPause = false;
+
+    function open(fromPause) {
+
+        openedFromPause = !!fromPause;
+
+        syncUI();
+
+        ScreenManager.showScreen(
+            "settingsScreen"
+        );
+    }
+
     // ===== SECTION 2 =====
     // LOAD FROM SAVE
     // =====================================
@@ -426,6 +443,23 @@ const SettingsManager = (() => {
                 "click",
                 function() {
 
+                    if (openedFromPause) {
+
+                        openedFromPause = false;
+
+                        ScreenManager
+                            .showScreen(
+                                "gameScreen"
+                            );
+
+                        ScreenManager
+                            .showOverlay(
+                                "pauseScreen"
+                            );
+
+                        return;
+                    }
+
                     ScreenManager
                         .showScreen(
                             "menuScreen"
@@ -451,7 +485,8 @@ const SettingsManager = (() => {
         setMusicVolume,
         setSfxVolume,
         bindEvents,
-        syncUI
+        syncUI,
+        open
     };
 
 })();

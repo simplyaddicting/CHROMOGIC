@@ -1489,11 +1489,7 @@ document.querySelectorAll(
 
     bind("btnSettings", function() {
 
-        SettingsManager.syncUI();
-
-        ScreenManager.showScreen(
-            "settingsScreen"
-        );
+        SettingsManager.open(false);
     });
 
     bind("btnAbout", function() {
@@ -1630,11 +1626,7 @@ document.querySelectorAll(
 
     bind("pauseSettingsBtn", function() {
 
-        SettingsManager.syncUI();
-
-        ScreenManager.showScreen(
-            "settingsScreen"
-        );
+        SettingsManager.open(true);
     });
 }
 
