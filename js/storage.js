@@ -378,9 +378,50 @@ function getMarathonBestStreak(difficulty) {
         return true;
     }
 
-function getCampaignBests() {
-    return save.campaignBests || { easy: null, medium: null, hard: null, expert: null };
-}
+    function getCampaignBests() {
+        return save.campaignBests || { easy: null, medium: null, hard: null, expert: null };
+    }
+
+    // ===== SECTION 13 =====
+    // HEARD PLAYLISTS
+    // Tracks which difficulty+mode combos
+    // the player has listened to.
+    // =====================================
+
+    function recordHeardPlaylist(difficulty, mode) {
+        if (!save.heardPlaylists) {
+            save.heardPlaylists = [];
+        }
+        const key = difficulty + "_" + mode;
+        if (!save.heardPlaylists.includes(key)) {
+            save.heardPlaylists.push(key);
+            persist();
+        }
+        return save.heardPlaylists;
+    }
+
+    function getHeardPlaylists() {
+        return save.heardPlaylists || [];
+    }
+
+    // ===== SECTION 14 =====
+    // MARATHON DIFFICULTIES PLAYED
+    // =====================================
+
+    function recordMarathonDifficultyPlayed(difficulty) {
+        if (!save.marathonDifficultiesPlayed) {
+            save.marathonDifficultiesPlayed = [];
+        }
+        if (!save.marathonDifficultiesPlayed.includes(difficulty)) {
+            save.marathonDifficultiesPlayed.push(difficulty);
+            persist();
+        }
+        return save.marathonDifficultiesPlayed;
+    }
+
+    function getMarathonDifficultiesPlayed() {
+        return save.marathonDifficultiesPlayed || [];
+    }
 
     // ===== SECTION 12 =====
     // PUBLIC API
@@ -404,7 +445,11 @@ function getCampaignBests() {
         unlockAchievement,
         recordSkip,
         getMarathonBestStreak,
-        getCampaignBests
+        getCampaignBests,
+        recordHeardPlaylist,
+        getHeardPlaylists,
+        recordMarathonDifficultyPlayed,
+        getMarathonDifficultiesPlayed
     };
 
 })();

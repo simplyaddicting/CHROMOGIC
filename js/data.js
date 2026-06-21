@@ -577,8 +577,60 @@ const ACHIEVEMENTS = [
         description: "Play between 5 AM and 7 AM.",
         reward: "star",
         secret: true
+    },
+
+    // ===== MUSIC / MARATHON SECRETS =====
+
+    {
+        id: "the_remix",
+        title: "The Remix",
+        description: "Listen to tracks from every playlist in the game (all difficulties, both moods).",
+        reward: "crown",
+        secret: true
+    },
+    {
+        id: "the_dj",
+        title: "The DJ",
+        description: "Trigger both soft and intense mode on every grid size in a single Marathon run.",
+        reward: "crown",
+        secret: true
+    },
+    {
+        id: "im_still_standing",
+        title: "I'm Still Standing",
+        description: "Solve a puzzle 3 times while the Marathon timer is under 30 seconds.",
+        reward: "crown",
+        secret: true
+    },
+    {
+        id: "silence_is_golden",
+        title: "Silence Is Golden",
+        description: "Set both music and SFX volume to zero.",
+        reward: "star",
+        secret: true
+    },
+    {
+        id: "against_the_clock",
+        title: "Against The Clock",
+        description: "Solve a Marathon puzzle with 5 seconds or less remaining.",
+        reward: "crown",
+        secret: true
+    },
+    {
+        id: "marathon_tourist",
+        title: "Marathon Tourist",
+        description: "Play all three Marathon difficulties at least once.",
+        reward: "star",
+        secret: false
+    },
+    {
+        id: "comeback_kid",
+        title: "Comeback Kid",
+        description: "Recover from a 0-streak to a 5-streak in a single Marathon run.",
+        reward: "crown",
+        secret: true
     }
-    
+
 ];
 
 // ===== SECTION 7 =====

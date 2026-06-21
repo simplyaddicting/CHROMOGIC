@@ -61,14 +61,26 @@ const AudioSystem = (() => {
                 "audio/music/easy/soft/Soft Loop.mp3",
                 "audio/music/easy/soft/The Quiet Between Notes 1.mp3",
                 "audio/music/easy/soft/The Quiet Between Notes 2.mp3",
-                "audio/music/easy/soft/The Quiet Between Notes 3.mp3"
+                "audio/music/easy/soft/The Quiet Between Notes 3.mp3",
+                "audio/music/easy/soft/The Quiet Between Notes 4.mp3", 
+                "audio/music/easy/soft/The Quiet Between Notes 5.mp3", 
+                "audio/music/easy/soft/Whispers of the Heart 1.mp3", 
+                "audio/music/easy/soft/Whispers of the Heart 2.mp3", 
+                "audio/music/easy/soft/Whispers of the Heart 3.mp3", 
+                "audio/music/easy/soft/Whispers of the Heart 4.mp3"
             ],
             intense: [
                 "audio/music/easy/intense/Falling Tension.mp3",
                 "audio/music/easy/intense/Glass Staircase.mp3",
                 "audio/music/easy/intense/Showdown 1.mp3",
                 "audio/music/easy/intense/Showdown 2.mp3",
-                "audio/music/easy/intense/Winter Waltz.mp3"
+                "audio/music/easy/intense/Winter Waltz.mp3",
+                "audio/music/easy/intense/The Duel of Shadows 1.mp3",
+                "audio/music/easy/intense/The Duel of Shadows 2.mp3",
+                "audio/music/easy/intense/The Duel of Shadows 3.mp3",
+                "audio/music/easy/intense/The Duel of Shadows 4.mp3",
+                "audio/music/easy/intense/The Duel of Shadows 5.mp3",
+                "audio/music/easy/intense/The Duel of Shadows 6.mp3",
             ]
         },
 
@@ -78,7 +90,11 @@ const AudioSystem = (() => {
                 "audio/music/medium/soft/Snowfall Serenade 1.mp3",
                 "audio/music/medium/soft/Snowfall Serenade 2.mp3",
                 "audio/music/medium/soft/Snowfall Serenade 3.mp3",
-                "audio/music/medium/soft/Snowfall Serenade 4.mp3"
+                "audio/music/medium/soft/Snowfall Serenade 4.mp3",
+                "audio/music/medium/soft/Whispered Breeze 1.mp3",
+                "audio/music/medium/soft/Whispered Breeze 2.mp3",
+                "audio/music/medium/soft/Whispered Breeze 3.mp3",
+                "audio/music/medium/soft/Whispered Breeze 4.mp3"
             ],
             intense: [
                 "audio/music/medium/intense/Pressure Reeds 1.mp3",
@@ -86,7 +102,13 @@ const AudioSystem = (() => {
                 "audio/music/medium/intense/The Wind Is Always Behind 1.mp3",
                 "audio/music/medium/intense/The Wind Is Always Behind 2.mp3",
                 "audio/music/medium/intense/The Wind Is Always Behind 3.mp3",
-                "audio/music/medium/intense/The Wind Is Always Behind 4.mp3"
+                "audio/music/medium/intense/The Wind Is Always Behind 4.mp3",
+                "audio/music/medium/intense/The Duel of the Winds 1.mp3",
+                "audio/music/medium/intense/The Duel of the Winds 2.mp3",
+                "audio/music/medium/intense/The Duel of the Winds 3.mp3",
+                "audio/music/medium/intense/The Duel of the Winds 4.mp3",
+                "audio/music/medium/intense/The Duel of the Winds 5.mp3",
+                "audio/music/medium/intense/The Duel of the Winds 6.mp3"
             ]
         },
 
@@ -95,13 +117,21 @@ const AudioSystem = (() => {
                 "audio/music/hard/soft/Brass & Velvet 1.mp3",
                 "audio/music/hard/soft/Brass & Velvet 2.mp3",
                 "audio/music/hard/soft/Brass & Velvet 3.mp3",
-                "audio/music/hard/soft/Brass & Velvet 4.mp3"
+                "audio/music/hard/soft/Brass & Velvet 4.mp3",
+                "audio/music/hard/soft/Golden Echoes 1.mp3",
+                "audio/music/hard/soft/Golden Echoes 2.mp3",
+                "audio/music/hard/soft/Golden Echoes 3.mp3", 
+                "audio/music/hard/soft/Golden Echoes 4.mp3"
             ],
             intense: [
                 "audio/music/hard/intense/The Last Stand 1.mp3",
                 "audio/music/hard/intense/The Last Stand 2.mp3",
                 "audio/music/hard/intense/The Last Stand 3.mp3",
-                "audio/music/hard/intense/The Last Stand 4.mp3"
+                "audio/music/hard/intense/The Last Stand 4.mp3",
+                "audio/music/hard/intense/Brass vs 1.mp3",
+                "audio/music/hard/intense/Brass vs 2.mp3",
+                "audio/music/hard/intense/Brass vs 3.mp3",
+                "audio/music/hard/intense/Brass vs 4.mp3"
             ]
         },
 
@@ -110,13 +140,23 @@ const AudioSystem = (() => {
                 "audio/music/expert/soft/Gated Clamps 1.mp3",
                 "audio/music/expert/soft/Gated Clamps 2.mp3",
                 "audio/music/expert/soft/The Quiet Machine 1.mp3",
-                "audio/music/expert/soft/The Quiet Machine 2.mp3"
+                "audio/music/expert/soft/The Quiet Machine 2.mp3",
+                "audio/music/expert/soft/Glitching Out 1.mp3",
+                "audio/music/expert/soft/Glitching Out 2.mp3",
+                "audio/music/expert/soft/Glitching Out 3.mp3",
+                "audio/music/expert/soft/Glitching Out 4.mp3"
             ],
             intense: [
                 "audio/music/expert/intense/Rust & Resistance 1.mp3",
                 "audio/music/expert/intense/Rust & Resistance 2.mp3",
                 "audio/music/expert/intense/Rust & Resistance 3.mp3",
-                "audio/music/expert/intense/Rust & Resistance 4.mp3"
+                "audio/music/expert/intense/Rust & Resistance 4.mp3",
+                "audio/music/expert/intense/Circuit Warfare 1.mp3",
+                "audio/music/expert/intense/Circuit Warfare 2.mp3",
+                "audio/music/expert/intense/Circuit Warfare 3.mp3",
+                "audio/music/expert/intense/Circuit Warfare 4.mp3",
+                "audio/music/expert/intense/Circuit Warfare 5.mp3",
+                "audio/music/expert/intense/Circuit Warfare 6.mp3"
             ]
         }
     };
@@ -259,6 +299,38 @@ const AudioSystem = (() => {
             return;
         }
 
+        // Track heard playlists for
+        // "The Remix" achievement
+        if (
+            typeof StorageManager !== "undefined" &&
+            typeof AchievementManager !== "undefined"
+        ) {
+            const heard =
+                StorageManager
+                    .recordHeardPlaylist(
+                        difficulty,
+                        mode
+                    );
+
+            // All gameplay combos:
+            // easy/hard/expert × soft/intense
+            const allCombos = [
+                "easy_soft",   "easy_intense",
+                "hard_soft",   "hard_intense",
+                "expert_soft", "expert_intense"
+            ];
+
+            const allHeard =
+                allCombos.every(function(k) {
+                    return heard.includes(k);
+                });
+
+            if (allHeard) {
+                AchievementManager
+                    .tryUnlock("the_remix");
+            }
+        }
+
         currentDifficulty = difficulty;
         currentMode = mode;
         currentPlaylist = shuffleArray(
@@ -331,6 +403,36 @@ const AudioSystem = (() => {
         }
 
         currentMode = mode;
+
+        // Track heard playlists for
+        // "The Remix" achievement
+        if (
+            typeof StorageManager !== "undefined" &&
+            typeof AchievementManager !== "undefined"
+        ) {
+            const heard =
+                StorageManager
+                    .recordHeardPlaylist(
+                        currentDifficulty,
+                        mode
+                    );
+
+            const allCombos = [
+                "easy_soft",   "easy_intense",
+                "hard_soft",   "hard_intense",
+                "expert_soft", "expert_intense"
+            ];
+
+            const allHeard =
+                allCombos.every(function(k) {
+                    return heard.includes(k);
+                });
+
+            if (allHeard) {
+                AchievementManager
+                    .tryUnlock("the_remix");
+            }
+        }
 
         const list =
             PLAYLISTS[currentDifficulty] &&
@@ -503,12 +605,34 @@ const AudioSystem = (() => {
             currentMusic.volume =
                 musicVolume;
         }
+
+        // Check Silence Is Golden
+        if (
+            musicVolume === 0 &&
+            sfxVolume === 0 &&
+            typeof AchievementManager !==
+                "undefined"
+        ) {
+            AchievementManager
+                .tryUnlock("silence_is_golden");
+        }
     }
 
     function setSfxVolume(val) {
 
         sfxVolume =
             Math.max(0, Math.min(1, val));
+
+        // Check Silence Is Golden
+        if (
+            musicVolume === 0 &&
+            sfxVolume === 0 &&
+            typeof AchievementManager !==
+                "undefined"
+        ) {
+            AchievementManager
+                .tryUnlock("silence_is_golden");
+        }
     }
 
     function getMusicVolume() {

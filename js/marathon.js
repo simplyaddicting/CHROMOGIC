@@ -34,7 +34,30 @@ const MarathonManager = (() => {
             sequencePos:     0,
             sequenceCount:   0,
             newAchievements: [],
-            lowTimePinged: false
+            lowTimePinged:   false,
+
+            // For "The DJ": tracks which
+            // gridSize+mode combos have fired
+            // in this run. Need all 3 grids
+            // to have seen both soft+intense.
+            djModes: {
+                4: new Set(),
+                6: new Set(),
+                8: new Set()
+            },
+
+            // For "I'm Still Standing":
+            // count puzzles solved while
+            // timer was under 30s
+            lowTimeSolves: 0,
+
+            // For "Comeback Kid":
+            // track whether streak hit 0 then 5
+            hadStreakBreak: false,
+
+            // For "Against The Clock":
+            // checked per-puzzle solve
+            againstClockDone: false
         };
 
         countdownRemaining =
@@ -46,7 +69,32 @@ const MarathonManager = (() => {
             "easy",
             "soft"
         );
-marathon.lastGridSize = 4;
+
+        // Record this difficulty for
+        // "Marathon Tourist" achievement
+        StorageManager
+            .recordMarathonDifficultyPlayed(
+                difficulty
+            );
+
+        const played =
+            StorageManager
+                .getMarathonDifficultiesPlayed();
+
+        if (
+            played.includes("easy") &&
+            played.includes("medium") &&
+            played.includes("hard")
+        ) {
+            AchievementManager
+                .tryUnlock("marathon_tourist");
+        }
+
+        marathon.lastGridSize = 4;
+
+        // Record soft mode for grid 4
+        // (DJ tracking)
+        marathon.djModes[4].add("soft");
         GameCore.clearPuzzleLog();
 
         loadPuzzle();
@@ -143,6 +191,15 @@ marathon.lastGridSize = 4;
                 musicDifficulty,
                 currentMode
             );
+
+            // DJ tracking: record this
+            // gridSize+mode combo
+            if (marathon) {
+                const gs =
+                    puzzleConfig.gridSize;
+                marathon.djModes[gs]
+                    .add(currentMode);
+            }
 
             // Add time when grid size increases
         if (
@@ -384,16 +441,42 @@ document.body.classList.remove("low-time");
         marathon.mistakes +=
             result.mistakes;
 
+        // "I'm Still Standing": solved while
+        // timer was under 30s
+        if (countdownRemaining <= 30) {
+            marathon.lowTimeSolves++;
+            if (marathon.lowTimeSolves >= 3) {
+                AchievementManager
+                    .tryUnlock(
+                        "im_still_standing"
+                    );
+            }
+        }
+
+        // "Against The Clock": solved with
+        // 5s or less on the clock
+        if (
+            countdownRemaining <= 5 &&
+            !marathon.againstClockDone
+        ) {
+            marathon.againstClockDone = true;
+            AchievementManager
+                .tryUnlock("against_the_clock");
+        }
+
         // Pause countdown while result shows
         pauseCountdown();
 
         // Add time bonus
-const puzzleConfig = resolveCurrentConfig();
-const bonusTable = marathon.config.timeBonusByGrid;
-const bonus = bonusTable
-    ? (bonusTable[puzzleConfig.gridSize] || marathon.config.timeBonus)
-    : marathon.config.timeBonus;
-countdownRemaining += bonus;
+        const puzzleConfig =
+            resolveCurrentConfig();
+        const bonusTable =
+            marathon.config.timeBonusByGrid;
+        const bonus = bonusTable
+            ? (bonusTable[puzzleConfig.gridSize]
+               || marathon.config.timeBonus)
+            : marathon.config.timeBonus;
+        countdownRemaining += bonus;
 
         if (result.flawless) {
 
@@ -405,16 +488,57 @@ countdownRemaining += bonus;
                 )
             ) {
                 AudioSystem.setIntense();
+
+                // DJ tracking: record intense
+                // for current grid size
+                const gs =
+                    puzzleConfig.gridSize;
+                marathon.djModes[gs]
+                    .add("intense");
+
+                // Check The DJ: all 3 grids
+                // must have both modes
+                const allGridsDJ =
+                    [4, 6, 8].every(function(g) {
+                        return marathon
+                            .djModes[g]
+                            .has("soft") &&
+                            marathon
+                            .djModes[g]
+                            .has("intense");
+                    });
+                if (allGridsDJ) {
+                    AchievementManager
+                        .tryUnlock("the_dj");
+                }
             }
 
             AchievementManager.evaluateStreak(
                 marathon.streak
             );
 
+            // "Comeback Kid": recovered to
+            // streak 5 after a break
+            if (
+                marathon.streak >= 5 &&
+                marathon.hadStreakBreak
+            ) {
+                AchievementManager
+                    .tryUnlock("comeback_kid");
+            }
+
         } else {
 
+            if (marathon.streak > 0) {
+                marathon.hadStreakBreak = true;
+            }
             marathon.streak = 0;
             AudioSystem.setSoft();
+
+            // DJ tracking: record soft for
+            // current grid size on reset
+            const gs = puzzleConfig.gridSize;
+            marathon.djModes[gs].add("soft");
         }
 
         if (
