@@ -1249,90 +1249,585 @@ const MarathonSetupUI = (() => {
 window.MarathonSetupUI = MarathonSetupUI;
 
 // ===== SECTION 11 =====
-// RULES DEMO BUILDER
+// TUTORIAL UI
 // =====================================
 
-function buildRulesDemo() {
+const TutorialUI = (() => {
 
-    const demo =
-        document.getElementById(
-            "rulesDemo"
-        );
+    // ── Tutorial step definitions ──────
 
-    if (!demo) {
-        return;
+    const STEPS = [
+
+        // STEP 0 — Welcome
+        {
+            id: "welcome",
+            render() {
+                return `
+                <div class="tut-step tut-welcome">
+                    <div class="tut-icon">🎨</div>
+                    <h2 class="tut-title">Welcome to Chromogic</h2>
+                    <p class="tut-body">
+                        A color-logic puzzle where every row and column
+                        must be perfectly balanced. Let's walk through
+                        the rules together.
+                    </p>
+                    <p class="tut-sub">Use the arrows below to move between steps.</p>
+                </div>`;
+            }
+        },
+
+        // STEP 1 — The Grid
+        {
+            id: "grid",
+            render() {
+                return `
+                <div class="tut-step">
+                    <h2 class="tut-title">The Grid</h2>
+                    <p class="tut-body">
+                        The board is a square grid — 4×4, 6×6, or 8×8.
+                        Larger grids use more colors.
+                    </p>
+                    <div class="tut-grid-sizes">
+                        <div class="tut-grid-card">
+                            <div class="tut-mini-grid tut-grid-4"></div>
+                            <span>4×4 · 2 colors</span>
+                        </div>
+                        <div class="tut-grid-card">
+                            <div class="tut-mini-grid tut-grid-6"></div>
+                            <span>6×6 · 3 colors</span>
+                        </div>
+                        <div class="tut-grid-card">
+                            <div class="tut-mini-grid tut-grid-8"></div>
+                            <span>8×8 · 4 colors</span>
+                        </div>
+                    </div>
+                    <p class="tut-rule-box">
+                        <strong>Core rule:</strong> every row and every column
+                        must contain exactly <strong>2 of each color</strong>.
+                    </p>
+                </div>`;
+            },
+            afterRender() {
+                buildMiniGrids();
+            }
+        },
+
+        // STEP 2 — Clue Cells
+        {
+            id: "clues",
+            render() {
+                return `
+                <div class="tut-step">
+                    <h2 class="tut-title">Clue Cells</h2>
+                    <p class="tut-body">
+                        Some cells are pre-filled. They show a color
+                        <em>and</em> a number.
+                    </p>
+                    <div class="tut-clue-demo" id="tutClueDemo"></div>
+                    <p class="tut-body">
+                        The number tells you how many of that cell's
+                        <strong>orthogonal neighbors</strong>
+                        (up, down, left, right) share its color
+                        in the final solution.
+                    </p>
+                    <p class="tut-rule-box">
+                        A clue of <strong>0</strong> means none of its
+                        neighbors match.<br>
+                        A clue of <strong>2</strong> means two of its
+                        neighbors match.
+                    </p>
+                </div>`;
+            },
+            afterRender() {
+                buildClueDemo();
+            }
+        },
+
+        // STEP 3 — Filling Cells (interactive)
+        {
+            id: "filling",
+            render() {
+                return `
+                <div class="tut-step">
+                    <h2 class="tut-title">Filling Cells</h2>
+                    <p class="tut-body">
+                        Click any <strong>empty cell</strong> to cycle
+                        through the available colors. Click again to
+                        cycle to the next color, or back to empty.
+                    </p>
+                    <div class="tut-interact-wrap">
+                        <p class="tut-interact-label">Try it — click the empty cells below:</p>
+                        <div class="tut-interactive-grid" id="tutInteractGrid"></div>
+                    </div>
+                    <p class="tut-sub">
+                        Clue cells (outlined) cannot be changed.
+                    </p>
+                </div>`;
+            },
+            afterRender() {
+                buildInteractiveGrid();
+            }
+        },
+
+        // STEP 4 — Checking
+        {
+            id: "checking",
+            render() {
+                return `
+                <div class="tut-step">
+                    <h2 class="tut-title">Checking Your Answer</h2>
+                    <p class="tut-body">
+                        When you think you've solved the puzzle, press
+                        <strong>Check</strong>.
+                    </p>
+                    <div class="tut-check-demo">
+                        <div class="tut-check-item">
+                            <span class="tut-cell-preview correct">✓</span>
+                            <span>Correct cells stay as they are.</span>
+                        </div>
+                        <div class="tut-check-item">
+                            <span class="tut-cell-preview wrong-preview">✗</span>
+                            <span>Wrong cells flash red and count as
+                            <strong>one mistake each</strong>.</span>
+                        </div>
+                    </div>
+                    <p class="tut-rule-box">
+                        Mistakes affect your score. Solve with
+                        <strong>zero mistakes</strong> for a
+                        ✨ Flawless result and to build your streak.
+                    </p>
+                    <p class="tut-sub">
+                        You can also <strong>Skip</strong> a puzzle —
+                        but it breaks your streak.
+                    </p>
+                </div>`;
+            }
+        },
+
+        // STEP 5 — Streaks
+        {
+            id: "streaks",
+            render() {
+                return `
+                <div class="tut-step">
+                    <h2 class="tut-title">Streaks & Rewards</h2>
+                    <p class="tut-body">
+                        Solve puzzles <strong>flawlessly</strong>
+                        (zero mistakes) to build a streak 🔥.
+                    </p>
+                    <div class="tut-streak-demo">
+                        <div class="tut-streak-row">
+                            <span class="tut-streak-badge">🔥 3</span>
+                            <span>Streak milestone — music intensifies</span>
+                        </div>
+                        <div class="tut-streak-row">
+                            <span class="tut-streak-badge">🔥 5</span>
+                            <span>Streak milestone — banner appears</span>
+                        </div>
+                        <div class="tut-streak-row">
+                            <span class="tut-streak-badge">🔥 10+</span>
+                            <span>Streak milestones — achievements unlock</span>
+                        </div>
+                    </div>
+                    <div class="tut-rewards">
+                        <div class="tut-reward-item">
+                            <span class="tut-reward-icon">⭐</span>
+                            <span>Complete a campaign</span>
+                        </div>
+                        <div class="tut-reward-item">
+                            <span class="tut-reward-icon">👑</span>
+                            <span>Complete with zero total mistakes</span>
+                        </div>
+                    </div>
+                </div>`;
+            }
+        },
+
+        // STEP 6 — Modes
+        {
+            id: "modes",
+            render() {
+                return `
+                <div class="tut-step">
+                    <h2 class="tut-title">Game Modes</h2>
+                    <div class="tut-mode-card">
+                        <div class="tut-mode-icon">🗺️</div>
+                        <div>
+                            <h3>Campaign</h3>
+                            <p>Choose your grid size, difficulty, and
+                            number of puzzles. A great way to improve
+                            at your own pace.</p>
+                        </div>
+                    </div>
+                    <div class="tut-mode-card">
+                        <div class="tut-mode-icon">⏱️</div>
+                        <div>
+                            <h3>Marathon</h3>
+                            <p>Race against a countdown timer. Solve a
+                            puzzle to earn bonus time. Miss the clock
+                            and it's game over. Grids get harder as
+                            you go — how far can you make it?</p>
+                        </div>
+                    </div>
+                </div>`;
+            }
+        },
+
+        // STEP 7 — You're ready
+        {
+            id: "ready",
+            render() {
+                return `
+                <div class="tut-step tut-ready">
+                    <div class="tut-icon">🚀</div>
+                    <h2 class="tut-title">You're Ready!</h2>
+                    <p class="tut-body">
+                        Start with a <strong>4×4 Easy Campaign</strong>
+                        to get a feel for the puzzles, then work your
+                        way up to Expert or Marathon.
+                    </p>
+                    <p class="tut-body">
+                        You can revisit this tutorial any time from the
+                        main menu under <strong>How to Play</strong>.
+                    </p>
+                    <p class="tut-sub">Good luck — and enjoy the colors! 🎨</p>
+                </div>`;
+            }
+        }
+    ];
+
+    let currentStep = 0;
+    let isFirstTime  = false;
+
+    // ── Public: open from menu button ──
+
+    function openFromMenu() {
+        isFirstTime = false;
+        _open(0);
     }
 
-    // A small 4x4 solved example
-    // 0=cobalt 1=sky 2=yellow 3=orange
-    const example = [
-        [0, 1, 2, 3],
-        [2, 3, 0, 1],
-        [1, 0, 3, 2],
-        [3, 2, 1, 0]
-    ];
+    // ── Public: auto-launch on first visit ──
 
-    // Clue cells to reveal (row, col)
-    const clues = [
-        { row: 0, col: 0, number: 0 },
-        { row: 0, col: 3, number: 0 },
-        { row: 1, col: 1, number: 0 },
-        { row: 2, col: 2, number: 0 },
-        { row: 3, col: 0, number: 0 }
-    ];
+    function maybeAutoLaunch() {
+        if (!StorageManager.isTutorialSeen()) {
+            isFirstTime = true;
+            _open(0);
+            return true;
+        }
+        return false;
+    }
 
-    demo.style.gridTemplateColumns =
-        "repeat(4, 52px)";
-    demo.style.gridTemplateRows =
-        "repeat(4, 52px)";
+    // ── Internal open ──────────────────
 
-    demo.innerHTML = "";
+    function _open(stepIndex) {
+        currentStep = stepIndex;
+        ScreenManager.showScreen("rulesScreen");
+        _renderStep();
+    }
 
-    for (let row = 0; row < 4; row++) {
+    // ── Render current step ────────────
 
-        for (let col = 0; col < 4; col++) {
+    function _renderStep() {
 
-            const cell =
-                document.createElement(
-                    "div"
-                );
+        const body = document.getElementById("tutorialBody");
+        const progress = document.getElementById("tutorialProgress");
+        const prevBtn  = document.getElementById("tutorialPrevBtn");
+        const nextBtn  = document.getElementById("tutorialNextBtn");
+        const doneBtn  = document.getElementById("tutorialDoneBtn");
 
-            cell.className =
-                "rules-demo-cell";
+        if (!body) return;
 
-            const clue = clues.find(
-                function(c) {
-                    return c.row === row &&
-                           c.col === col;
-                }
-            );
+        const step = STEPS[currentStep];
+        const total = STEPS.length;
+        const isLast = currentStep === total - 1;
 
-            if (clue) {
+        // Render step HTML (with fade-in)
+        body.innerHTML = step.render();
+        body.classList.remove("tut-fade-in");
+        void body.offsetWidth; // reflow
+        body.classList.add("tut-fade-in");
 
-                cell.classList.add(
-                    "color-" +
-                    example[row][col]
-                );
+        // Call post-render hook if any
+        if (typeof step.afterRender === "function") {
+            step.afterRender();
+        }
 
-                cell.style.outline =
-                    "2px solid var(--cell-clue-outline)";
-
-                cell.style.outlineOffset =
-                    "-2px";
-
-                cell.textContent =
-                    clue.number;
-
-            } else {
-
-                cell.style.background =
-                    "var(--cell-empty)";
+        // Progress dots
+        if (progress) {
+            progress.innerHTML = "";
+            for (let i = 0; i < total; i++) {
+                const dot = document.createElement("span");
+                dot.className = "tut-dot" + (i === currentStep ? " active" : "");
+                dot.addEventListener("click", function() {
+                    currentStep = i;
+                    _renderStep();
+                });
+                progress.appendChild(dot);
             }
+        }
 
-            demo.appendChild(cell);
+        // Nav buttons
+        if (prevBtn) prevBtn.disabled = currentStep === 0;
+        if (nextBtn) nextBtn.classList.toggle("hidden", isLast);
+        if (doneBtn) doneBtn.classList.toggle("hidden", !isLast);
+    }
+
+    // ── Mini grid builders (step 1) ────
+
+    function buildMiniGrids() {
+
+        const palette = [
+            "var(--color-0)",
+            "var(--color-1)",
+            "var(--color-2)",
+            "var(--color-3)"
+        ];
+
+        // 4×4 solved pattern (2 colors)
+        const pat4 = [
+            [0,1,0,1],
+            [1,0,1,0],
+            [0,1,0,1],
+            [1,0,1,0]
+        ];
+
+        // 6×6 pattern (3 colors)
+        const pat6 = [
+            [0,1,2,0,1,2],
+            [1,2,0,1,2,0],
+            [2,0,1,2,0,1],
+            [0,1,2,0,1,2],
+            [1,2,0,1,2,0],
+            [2,0,1,2,0,1]
+        ];
+
+        // 8×8 pattern (4 colors)
+        const pat8 = [
+            [0,1,2,3,0,1,2,3],
+            [2,3,0,1,2,3,0,1],
+            [1,0,3,2,1,0,3,2],
+            [3,2,1,0,3,2,1,0],
+            [0,1,2,3,0,1,2,3],
+            [2,3,0,1,2,3,0,1],
+            [1,0,3,2,1,0,3,2],
+            [3,2,1,0,3,2,1,0]
+        ];
+
+        _fillMiniGrid("tut-grid-4", pat4, palette);
+        _fillMiniGrid("tut-grid-6", pat6, palette);
+        _fillMiniGrid("tut-grid-8", pat8, palette);
+    }
+
+    function _fillMiniGrid(cls, pattern, palette) {
+
+        const el = document.querySelector("." + cls);
+        if (!el) return;
+
+        const n = pattern.length;
+        el.style.gridTemplateColumns = "repeat(" + n + ", 1fr)";
+        el.style.gridTemplateRows    = "repeat(" + n + ", 1fr)";
+        el.innerHTML = "";
+
+        pattern.forEach(function(row) {
+            row.forEach(function(c) {
+                const cell = document.createElement("div");
+                cell.className = "tut-mini-cell";
+                cell.style.background = palette[c];
+                el.appendChild(cell);
+            });
+        });
+    }
+
+    // ── Clue demo (step 2) ─────────────
+
+    function buildClueDemo() {
+
+        const demo = document.getElementById("tutClueDemo");
+        if (!demo) return;
+
+        // 4×4 solved grid snippet — show only middle 2×4 rows
+        // Focus: one clue cell with its neighbors annotated
+        const grid = [
+            [0, 1, 0, 1],
+            [1, 0, 1, 0],
+            [0, 1, 0, 1],
+            [1, 0, 1, 0]
+        ];
+
+        // Clue at (1,1): color=0, its ortho neighbors in grid:
+        //   up=(0,1)=1, down=(2,1)=1, left=(1,0)=1, right=(1,2)=1
+        // So zero same-color neighbors → clue number = 0
+        // Clue at (0,0): color=0, neighbors right=(0,1)=1, down=(1,0)=1 → 0 matches
+        // Let's place a more illustrative clue: (1,0) color=1
+        //   up=(0,0)=0 no, down=(2,0)=0 no, right=(1,1)=0 no → clue 0
+        // Use (0,0) color=0, neighbors: right=1(no), down=1(no) → 0
+        // Better: (2,2) color=0, neighbors: up=(1,2)=1(no), down=(3,2)=1(no),
+        //         left=(2,1)=1(no), right=(2,3)=1(no) → 0  — boring
+        // Let's use a hand-crafted 4×4 where one cell has 2 same-color neighbors
+        // R0: A B A B
+        // R1: A B A B   ← cell (1,0)=A, up=(0,0)=A ✓, down=(2,0)=A ✓, right=(1,1)=B ✗ → clue=2
+        // R2: A B A B
+        // R3: B A B A
+        // But that violates the 2-per-row rule... let's just hand-code:
+        const g = [
+            [0, 1, 1, 0],
+            [0, 1, 1, 0],
+            [1, 0, 0, 1],
+            [1, 0, 0, 1]
+        ];
+        // Cell (0,0)=0: right=(0,1)=1 no, down=(1,0)=0 yes → clue=1
+        // Cell (1,1)=1: up=(0,1)=1 yes, down=(2,1)=0 no, left=(1,0)=0 no, right=(1,2)=1 yes → clue=2
+        // Cell (2,3)=1: up=(1,3)=0 no, down=(3,3)=1 yes, left=(2,2)=0 no → clue=1
+
+        const clues = [
+            { row: 0, col: 0, number: 1 },
+            { row: 1, col: 1, number: 2 },
+            { row: 2, col: 3, number: 1 }
+        ];
+
+        demo.style.gridTemplateColumns = "repeat(4, 48px)";
+        demo.style.gridTemplateRows    = "repeat(4, 48px)";
+        demo.innerHTML = "";
+
+        for (let r = 0; r < 4; r++) {
+            for (let c = 0; c < 4; c++) {
+                const cell = document.createElement("div");
+                cell.className = "tut-demo-cell";
+                const clue = clues.find(function(cl) {
+                    return cl.row === r && cl.col === c;
+                });
+                if (clue) {
+                    cell.classList.add("tut-clue-cell", "color-" + g[r][c]);
+                    cell.textContent = clue.number;
+
+                    // Build tooltip
+                    const tip = document.createElement("div");
+                    tip.className = "tut-clue-tip";
+                    tip.textContent = clue.number +
+                        " neighbor" + (clue.number !== 1 ? "s" : "") +
+                        " match";
+                    cell.appendChild(tip);
+                } else {
+                    cell.classList.add("color-" + g[r][c]);
+                    cell.style.opacity = "0.45";
+                }
+                demo.appendChild(cell);
+            }
         }
     }
-}
+
+    // ── Interactive grid (step 3) ──────
+
+    const INTERACT_COLORS = 2; // 2-color demo
+
+    function buildInteractiveGrid() {
+
+        const wrap = document.getElementById("tutInteractGrid");
+        if (!wrap) return;
+
+        // 4×4 with 3 clue cells, rest empty
+        const clueData = [
+            { row: 0, col: 0, color: 0, number: 1 },
+            { row: 1, col: 3, color: 1, number: 0 },
+            { row: 3, col: 1, color: 0, number: 2 }
+        ];
+
+        const playerBoard = [];
+        for (let r = 0; r < 4; r++) {
+            playerBoard.push([null, null, null, null]);
+        }
+
+        wrap.style.gridTemplateColumns = "repeat(4, 52px)";
+        wrap.style.gridTemplateRows    = "repeat(4, 52px)";
+        wrap.innerHTML = "";
+
+        function renderBoard() {
+            wrap.innerHTML = "";
+            for (let r = 0; r < 4; r++) {
+                for (let c = 0; c < 4; c++) {
+                    const cell = document.createElement("div");
+                    cell.className = "tut-interact-cell";
+
+                    const clue = clueData.find(function(cl) {
+                        return cl.row === r && cl.col === c;
+                    });
+
+                    if (clue) {
+                        cell.classList.add("tut-clue-cell", "color-" + clue.color);
+                        cell.textContent = clue.number;
+                    } else {
+                        const val = playerBoard[r][c];
+                        if (val !== null) {
+                            cell.classList.add("color-" + val);
+                        }
+                        cell.addEventListener("click", function() {
+                            const cur = playerBoard[r][c];
+                            if (cur === null) {
+                                playerBoard[r][c] = 0;
+                            } else if (cur < INTERACT_COLORS - 1) {
+                                playerBoard[r][c] = cur + 1;
+                            } else {
+                                playerBoard[r][c] = null;
+                            }
+                            renderBoard();
+                        });
+                    }
+
+                    wrap.appendChild(cell);
+                }
+            }
+        }
+
+        renderBoard();
+    }
+
+    // ── Bind nav buttons ───────────────
+
+    function bindEvents() {
+
+        function bind(id, fn) {
+            const el = document.getElementById(id);
+            if (el) el.addEventListener("click", fn);
+        }
+
+        bind("tutorialPrevBtn", function() {
+            if (currentStep > 0) {
+                currentStep--;
+                _renderStep();
+            }
+        });
+
+        bind("tutorialNextBtn", function() {
+            if (currentStep < STEPS.length - 1) {
+                currentStep++;
+                _renderStep();
+            }
+        });
+
+        bind("tutorialDoneBtn", function() {
+            StorageManager.markTutorialSeen();
+            ScreenManager.showScreen("menuScreen");
+        });
+
+        bind("tutorialBackBtn", function() {
+            StorageManager.markTutorialSeen();
+            ScreenManager.showScreen("menuScreen");
+        });
+    }
+
+    return {
+        openFromMenu,
+        maybeAutoLaunch,
+        bindEvents
+    };
+
+})();
+
+window.TutorialUI = TutorialUI;
+
+// kept for backward compat (no longer used but safe to leave)
+function buildRulesDemo() {}
+
 
 // ===== SECTION 12 =====
 // SHARED OPTION GROUP HELPER
@@ -1480,11 +1975,7 @@ document.querySelectorAll(
 
     bind("btnRules", function() {
 
-        buildRulesDemo();
-
-        ScreenManager.showScreen(
-            "rulesScreen"
-        );
+        TutorialUI.openFromMenu();
     });
 
     bind("btnSettings", function() {
@@ -1517,12 +2008,6 @@ document.querySelectorAll(
     });
 
     bind("achievementsBackBtn", function() {
-        ScreenManager.showScreen(
-            "menuScreen"
-        );
-    });
-
-    bind("rulesBackBtn", function() {
         ScreenManager.showScreen(
             "menuScreen"
         );
@@ -2509,6 +2994,8 @@ document.addEventListener(
 
         SettingsManager.bindEvents();
 
+        TutorialUI.bindEvents();
+
         CampaignSetupUI.init();
 
         MarathonSetupUI.init();
@@ -2545,10 +3032,14 @@ document.addEventListener(
                             splash.classList
                                 .remove("hiding");
 
-                            ScreenManager
-                                .showScreen(
-                                    "menuScreen"
-                                );
+                            // Show tutorial on first visit,
+                            // otherwise go straight to menu
+                            if (!TutorialUI.maybeAutoLaunch()) {
+                                ScreenManager
+                                    .showScreen(
+                                        "menuScreen"
+                                    );
+                            }
 
                             // Browser now
                             // allows audio

@@ -334,6 +334,17 @@ function getMarathonBestStreak(difficulty) {
     // ACHIEVEMENTS
     // =====================================
 
+    // ===== TUTORIAL =====
+
+    function isTutorialSeen() {
+        return !!save.tutorialSeen;
+    }
+
+    function markTutorialSeen() {
+        save.tutorialSeen = true;
+        persist();
+    }
+
     function unlockAchievement(id) {
 
         if (
@@ -449,7 +460,9 @@ function getMarathonBestStreak(difficulty) {
         recordHeardPlaylist,
         getHeardPlaylists,
         recordMarathonDifficultyPlayed,
-        getMarathonDifficultiesPlayed
+        getMarathonDifficultiesPlayed,
+        isTutorialSeen,
+        markTutorialSeen
     };
 
 })();

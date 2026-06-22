@@ -665,6 +665,9 @@ const DEFAULT_SAVE = {
     // achievements
     unlockedAchievements: [],
 
+    // tutorial
+    tutorialSeen: false,
+
     // settings
     settings: {
         theme: "dark",

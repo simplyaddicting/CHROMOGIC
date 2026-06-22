@@ -53,7 +53,7 @@
         <p class="nav-desc">Endless puzzles against a countdown — how far can you go?</p>
     </div>
     <button class="nav-btn secondary" id="btnAchievements">Achievements</button>
-    <button class="nav-btn secondary" id="btnRules">Rules</button>
+    <button class="nav-btn secondary" id="btnRules">How to Play</button>
     <button class="nav-btn secondary" id="btnSettings">Settings</button>
     <button class="nav-btn secondary" id="btnAbout">About</button>
 </nav>
@@ -347,68 +347,28 @@
     </section>
 
     <!-- ==================== -->
-    <!-- RULES                -->
+    <!-- TUTORIAL             -->
     <!-- ==================== -->
 
-    <section id="rulesScreen" class="screen">
-        <div class="screen-header">
-            <button class="back-btn" id="rulesBackBtn">← Back</button>
-            <h2>How to Play</h2>
+    <section id="rulesScreen" class="screen tutorial-screen">
+
+        <!-- Step progress dots -->
+        <div class="tutorial-progress" id="tutorialProgress"></div>
+
+        <!-- All steps live here; JS shows one at a time -->
+        <div class="tutorial-body" id="tutorialBody"></div>
+
+        <!-- Persistent nav bar -->
+        <div class="tutorial-nav">
+            <button class="back-btn tutorial-back-btn" id="tutorialBackBtn">← Back</button>
+            <div class="tutorial-nav-center">
+                <button class="tutorial-prev-btn" id="tutorialPrevBtn">‹ Prev</button>
+                <button class="tutorial-next-btn" id="tutorialNextBtn">Next ›</button>
+                <button class="tutorial-done-btn hidden" id="tutorialDoneBtn">Let's Play! →</button>
+            </div>
+            <div class="tutorial-nav-spacer"></div>
         </div>
 
-        <div class="rules-content">
-
-            <div class="rules-step">
-                <div class="rules-step-number">1</div>
-                <div class="rules-step-text">
-                    <h3>The Grid</h3>
-                    <p>The board is an N×N grid. Each row and each column must contain exactly 2 of each color.</p>
-                </div>
-            </div>
-
-            <div class="rules-step">
-                <div class="rules-step-number">2</div>
-                <div class="rules-step-text">
-                    <h3>Clue Cells</h3>
-                    <p>Pre-filled cells show a color and a number. That number tells you how many of its orthogonal neighbors (up, down, left, right) share the same color in the solution.</p>
-                </div>
-            </div>
-
-            <div class="rules-demo" id="rulesDemo"></div>
-
-            <div class="rules-step">
-                <div class="rules-step-number">3</div>
-                <div class="rules-step-text">
-                    <h3>Filling Cells</h3>
-                    <p>Click any empty cell to cycle through the available colors. Click again to cycle to the next color, or back to empty.</p>
-                </div>
-            </div>
-
-            <div class="rules-step">
-                <div class="rules-step-number">4</div>
-                <div class="rules-step-text">
-                    <h3>Checking Your Answer</h3>
-                    <p>Press <strong>Check</strong> to verify your solution. Every incorrect cell is highlighted and counts as one mistake. Use this wisely — mistakes affect your final score.</p>
-                </div>
-            </div>
-
-            <div class="rules-step">
-                <div class="rules-step-number">5</div>
-                <div class="rules-step-text">
-                    <h3>Streaks</h3>
-                    <p>Solve puzzles with 0 mistakes to build a streak. Streak milestones are celebrated with a special banner.</p>
-                </div>
-            </div>
-
-            <div class="rules-step">
-                <div class="rules-step-number">6</div>
-                <div class="rules-step-text">
-                    <h3>Marathon Mode</h3>
-                    <p>Race against a countdown timer. Complete a puzzle to gain bonus time. Running out of time ends the run. The further you go, the harder it gets.</p>
-                </div>
-            </div>
-
-        </div>
     </section>
 
     <!-- ==================== -->
