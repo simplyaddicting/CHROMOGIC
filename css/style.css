@@ -1525,7 +1525,7 @@ body.low-time::before {
    TUTORIAL SCREEN
    ===================================== */
 
-.tutorial-screen {
+.tutorial-screen.active {
     display: flex;
     flex-direction: column;
     height: 100%;
