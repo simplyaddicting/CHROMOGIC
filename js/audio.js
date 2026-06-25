@@ -443,23 +443,21 @@ const AudioSystem = (() => {
         }
 
         // Fade out current track
-        fadeOut(currentMusic, 800,
-            function() {
+        fadeOut(currentMusic, 800, function() {
 
-                currentPlaylist =
-                    shuffleArray(list.slice());
+    // Abort if stopAll() was called during the fade
+    if (!playlistActive) return;
 
-                currentTrackIndex = 0;
+    // Abort if difficulty/mode changed again during the fade
+    if (currentMode !== mode) return;
 
-                currentMusicKey =
-                    currentDifficulty +
-                    "_" + mode;
+    currentPlaylist = shuffleArray(list.slice());
+    currentTrackIndex = 0;
+    currentMusicKey = currentDifficulty + "_" + mode;
 
-                playCurrentTrack();
-
-                fadeIn(currentMusic, 800);
-            }
-        );
+    playCurrentTrack();
+    fadeIn(currentMusic, 800);
+});
     }
 
     function setIntense() {
